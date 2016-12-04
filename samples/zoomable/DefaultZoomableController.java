@@ -320,17 +320,20 @@ public class DefaultZoomableController implements ZoomableController, TransformG
      * @param pivotX
      * @param pivotY
      */
-    private float limitScale(float pivotX, float pivotY)
-    {
-        float scale = -1.0f;
-        float currentScale = getScaleFactor();
-        if (currentScale < mMinScaleFactor)
-        {
-            scale = mMinScaleFactor / currentScale;
-            mActiveTransform.postScale(scale, scale, pivotX, pivotY);
-        }
-        return scale;
-    }
+     private float limitScale(float pivotX, float pivotY)
+     {
+         float scale = -1.0f;
+
+         float currentScale = getScaleFactor();
+         float targetScale = limit(currentScale, mMinScaleFactor, mMaxScaleFactor);
+         if (targetScale != currentScale) {
+             scale = targetScale / currentScale;
+             mActiveTransform.postScale(scale, scale, pivotX, pivotY);
+         } else
+             scale = currentScale;
+
+         return scale;
+     }
 
     private void limitTranslation()
     {
@@ -502,5 +505,3 @@ public class DefaultZoomableController implements ZoomableController, TransformG
     }
 
 }
-
-
